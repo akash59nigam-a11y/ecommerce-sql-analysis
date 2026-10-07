@@ -1,16 +1,4 @@
--- ============================================================
--- E-commerce Sales Analysis — Business Queries
--- Engine: MySQL 8.0+ (window functions require 8.0+)
--- Revenue = quantity * unit_price * (1 - discount_pct/100)
--- Only "Delivered" orders are counted as realized revenue
--- unless a query is explicitly about order status itself.
--- ============================================================
 
-
--- ------------------------------------------------------------
--- Q1. Headline numbers: total revenue, orders, AOV
--- Technique: JOIN + aggregation
--- ------------------------------------------------------------
 SELECT
     COUNT(DISTINCT o.order_id)                                  AS delivered_orders,
     ROUND(SUM(oi.quantity * oi.unit_price
@@ -23,10 +11,6 @@ JOIN order_items oi ON oi.order_id = o.order_id
 WHERE o.order_status = 'Delivered';
 
 
--- ------------------------------------------------------------
--- Q2. Monthly revenue trend
--- Technique: JOIN + GROUP BY + date functions
--- ------------------------------------------------------------
 SELECT
     DATE_FORMAT(o.order_date, '%Y-%m')                          AS month,
     COUNT(DISTINCT o.order_id)                                  AS orders,
@@ -39,10 +23,6 @@ GROUP BY DATE_FORMAT(o.order_date, '%Y-%m')
 ORDER BY month;
 
 
--- ------------------------------------------------------------
--- Q3. Top 10 best-selling products by revenue
--- Technique: JOIN + GROUP BY + aggregation + LIMIT
--- ------------------------------------------------------------
 SELECT
     p.product_id,
     p.product_name,
@@ -59,10 +39,6 @@ ORDER BY revenue DESC
 LIMIT 10;
 
 
--- ------------------------------------------------------------
--- Q4. Revenue and profit margin by category
--- Technique: JOIN + GROUP BY + derived aggregation
--- ------------------------------------------------------------
 SELECT
     p.category,
     ROUND(SUM(oi.quantity * oi.unit_price
@@ -81,10 +57,6 @@ GROUP BY p.category
 ORDER BY revenue DESC;
 
 
--- ------------------------------------------------------------
--- Q5. Repeat customers (more than one delivered order)
--- Technique: JOIN + GROUP BY + HAVING
--- ------------------------------------------------------------
 SELECT
     c.customer_id,
     c.customer_name,
@@ -100,12 +72,7 @@ GROUP BY c.customer_id, c.customer_name, c.city
 HAVING COUNT(DISTINCT o.order_id) > 1
 ORDER BY lifetime_revenue DESC;
 
-
--- ------------------------------------------------------------
--- Q6. Customer segmentation by lifetime spend (New / Regular / VIP)
--- Technique: subquery + CASE
--- ------------------------------------------------------------
-SELECT
+SELECT--
     segment,
     COUNT(*)                                                    AS customers,
     ROUND(AVG(lifetime_revenue), 2)                             AS avg_lifetime_revenue
