@@ -128,10 +128,6 @@ GROUP BY segment
 ORDER BY avg_lifetime_revenue DESC;
 
 
--- ------------------------------------------------------------
--- Q7. Monthly revenue with running total (cumulative revenue)
--- Technique: CTE + window function (SUM() OVER)
--- ------------------------------------------------------------
 WITH monthly_revenue AS (
     SELECT
         DATE_FORMAT(o.order_date, '%Y-%m')                      AS month,
@@ -149,11 +145,6 @@ SELECT
 FROM monthly_revenue
 ORDER BY month;
 
-
--- ------------------------------------------------------------
--- Q8. Rank products within their category by revenue
--- Technique: window function (RANK() ... PARTITION BY)
--- ------------------------------------------------------------
 WITH product_revenue AS (
     SELECT
         p.category,
@@ -178,11 +169,6 @@ SELECT * FROM ranked_products
 WHERE rank_in_category <= 3
 ORDER BY category, rank_in_category;
 
-
--- ------------------------------------------------------------
--- Q9. Month-over-month revenue growth %
--- Technique: CTE + window function (LAG())
--- ------------------------------------------------------------
 WITH monthly_revenue AS (
     SELECT
         DATE_FORMAT(o.order_date, '%Y-%m')                      AS month,
@@ -203,11 +189,7 @@ FROM monthly_revenue
 ORDER BY month;
 
 
--- ------------------------------------------------------------
--- Q10. Churn-risk customers: no delivered order in the last 90 days
--- (relative to the most recent order date in the dataset)
--- Technique: subquery + date filtering
--- ------------------------------------------------------------
+
 SELECT
     c.customer_id,
     c.customer_name,
@@ -222,11 +204,6 @@ HAVING MAX(o.order_date) < (
 )
 ORDER BY last_order_date;
 
-
--- ------------------------------------------------------------
--- Q11. Top 10 cities by revenue
--- Technique: JOIN + GROUP BY + aggregation
--- ------------------------------------------------------------
 SELECT
     o.shipping_city,
     COUNT(DISTINCT o.order_id)                                  AS orders,
@@ -239,11 +216,6 @@ GROUP BY o.shipping_city
 ORDER BY revenue DESC
 LIMIT 10;
 
-
--- ------------------------------------------------------------
--- Q12. Order status breakdown (Delivered / Cancelled / Returned)
--- Technique: GROUP BY + aggregation, no JOIN needed
--- ------------------------------------------------------------
 SELECT
     order_status,
     COUNT(*)                                                    AS num_orders,
@@ -253,10 +225,6 @@ GROUP BY order_status
 ORDER BY num_orders DESC;
 
 
--- ------------------------------------------------------------
--- Q13. Top 10 highest profit-margin products (min. 50 units sold)
--- Technique: JOIN + GROUP BY + HAVING + derived aggregation
--- ------------------------------------------------------------
 SELECT
     p.product_name,
     p.category,
@@ -272,11 +240,6 @@ HAVING SUM(oi.quantity) >= 50
 ORDER BY avg_margin_pct DESC
 LIMIT 10;
 
-
--- ------------------------------------------------------------
--- Q14. Top spending customer in each state
--- Technique: CTE + window function (ROW_NUMBER() ... PARTITION BY)
--- ------------------------------------------------------------
 WITH customer_state_spend AS (
     SELECT
         c.state,
