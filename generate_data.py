@@ -16,11 +16,7 @@ random.seed(42)
 fake = Faker("en_IN")
 Faker.seed(42)
 
-OUT = "/home/claude/ecommerce-sql-analysis/data"
-
-# ---------------------------------------------------------------
-# 1. CUSTOMERS
-# ---------------------------------------------------------------
+OUT = "/home/claude/ecommerce-sql-analysis/data
 N_CUSTOMERS = 4000
 CITIES_STATES = [
     ("Mumbai", "Maharashtra"), ("Delhi", "Delhi"), ("Bengaluru", "Karnataka"),
@@ -53,9 +49,6 @@ with open(f"{OUT}/customers.csv", "w", newline="", encoding="utf-8") as fh:
     w.writeheader()
     w.writerows(customers)
 
-# ---------------------------------------------------------------
-# 2. PRODUCTS
-# ---------------------------------------------------------------
 CATEGORIES = {
     "Electronics": (800, 45000),
     "Fashion": (299, 4500),
@@ -100,7 +93,7 @@ for category, (lo, hi) in CATEGORIES.items():
     n_products = 18 if category in ("Electronics", "Fashion", "Home & Kitchen") else 16
     used_names = set()
     for i in range(n_products):
-        # guarantee a unique product_name within the category (retry until unused combo found)
+        # guarantee a unique product_name within the category
         for _ in range(50):
             base_name = random.choice(names)
             brand_suffix = random.choice(SUFFIXES)
@@ -129,10 +122,6 @@ with open(f"{OUT}/products.csv", "w", newline="", encoding="utf-8") as fh:
     w.writerows(products)
 
 N_PRODUCTS = len(products)
-
-# ---------------------------------------------------------------
-# 3 & 4. ORDERS + ORDER_ITEMS
-# ---------------------------------------------------------------
 START = date(2024, 1, 1)
 END = date(2025, 12, 31)
 TOTAL_DAYS = (END - START).days
@@ -159,8 +148,6 @@ while d <= END:
     days_list.append(d)
     day_weights.append(seasonal_weight(d))
     d += timedelta(days=1)
-
-# 70% of orders come from a "repeat-customer" pool (30% of customers) to create realistic repeat-purchase behavior
 repeat_pool = random.sample(range(1, N_CUSTOMERS + 1), int(N_CUSTOMERS * 0.30))
 one_time_pool = [c for c in range(1, N_CUSTOMERS + 1) if c not in repeat_pool]
 
@@ -177,8 +164,6 @@ for oid in range(1, N_ORDERS + 1):
         cust_id = random.choice(repeat_pool)
     else:
         cust_id = random.choice(one_time_pool)
-
-    # don't let order date be before customer signup
     signup = date.fromisoformat(customer_signup_lookup[cust_id])
     if order_date < signup:
         order_date = signup + timedelta(days=random.randint(0, 30))
