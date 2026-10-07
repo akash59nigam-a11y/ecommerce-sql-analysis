@@ -1,12 +1,4 @@
-"""
-Generates a realistic synthetic e-commerce dataset for the
-E-commerce Sales Analysis SQL project.
 
-Produces 4 CSVs (customers, products, orders, order_items) with
-seasonal patterns, repeat customers, and realistic price/cost margins,
-so every number in the README/queries is computed from real data
-(not invented).
-"""
 import random
 import csv
 from datetime import date, timedelta
