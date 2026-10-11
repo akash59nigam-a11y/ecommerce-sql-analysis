@@ -85,7 +85,7 @@ for category, (lo, hi) in CATEGORIES.items():
     n_products = 18 if category in ("Electronics", "Fashion", "Home & Kitchen") else 16
     used_names = set()
     for i in range(n_products):
-        # guarantee a unique product_name within the category
+        # guarantee a unique product name within the category
         for _ in range(50):
             base_name = random.choice(names)
             brand_suffix = random.choice(SUFFIXES)
@@ -94,7 +94,7 @@ for category, (lo, hi) in CATEGORIES.items():
                 used_names.add(product_name)
                 break
         else:
-            product_name = f"{base_name} {brand_suffix} {pid}"  # fallback, should not trigger
+            product_name = f"{base_name} {brand_suffix} {pid}"  
             used_names.add(product_name)
         unit_price = round(random.uniform(lo, hi), 2)
         cost_ratio = random.uniform(0.55, 0.80)
@@ -132,7 +132,7 @@ def seasonal_weight(d: date) -> float:
         return 0.75
     return 1.0
 
-# Precompute per-day weights to sample order dates
+# Precompute per day weights to sample order dates
 day_weights = []
 days_list = []
 d = START
