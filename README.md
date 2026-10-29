@@ -1,4 +1,4 @@
-# E-commerce Sales Analysis — SQL
+# E-commerce Sales Analysis —  SQL
 
 End-to-end SQL analysis of a two-year e-commerce transaction dataset — revenue trends, top products, customer segmentation, and churn risk — using joins, CTEs, window functions, and aggregations on a 50,000+ row relational dataset.
 
