@@ -85,7 +85,7 @@ for category, (lo, hi) in CATEGORIES.items():
     n_products = 18 if category in ("Electronics", "Fashion", "Home & Kitchen") else 16
     used_names = set()
     for i in range(n_products):
-        # guarantee a unique product name within the category
+        # guarantee a unique product name within the category.
         for _ in range(50):
             base_name = random.choice(names)
             brand_suffix = random.choice(SUFFIXES)
