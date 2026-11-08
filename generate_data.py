@@ -132,7 +132,7 @@ def seasonal_weight(d: date) -> float:
         return 0.75
     return 1.0
 
-# Precompute per day weights to sample order dates
+# Precompute per day weights to sample order dates-
 day_weights = []
 days_list = []
 d = START
